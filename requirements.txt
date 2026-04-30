@@ -1,0 +1,7 @@
+strands-agents
+mcp
+requests
+python-dotenv
+rich
+metar
+ollama

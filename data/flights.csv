@@ -1,0 +1,4 @@
+flight_id,origin,destination,aircraft,route,altitude,passengers,cargo_kg
+AI101,DEL,BOM,A320,DEL-NAG-BOM,35000,180,2000
+AI202,BLR,DEL,B737,BLR-HYD-DEL,36000,160,1500
+AI303,MUM,DXB,A320,MUM-KAR-DXB,37000,170,2200
