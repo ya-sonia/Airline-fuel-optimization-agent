@@ -3,67 +3,83 @@ This project builds an intelligent fuel optimization agent that combines traditi
 
 ---
 
+##  Project Demo
+ [Watch Explanation Video](LINK)
+
+---
+
 ##  Architecture
+
+<p align="center">
+  <img src="images/architecture.png" width="500"/>
+</p>
 
 The system follows a layered architecture:
 
 1. **Input Layer**
-   - Flight data from CSV
+   - Flight data from CSV(data/flights.csv)
 
 2. **Optimization Layer**
-   - Local fuel calculation
+   - Distance estimation
+   - Fuel consumption calculation
    - Baseline optimization
 
-3. **Agent Layer (Strands)**
-   - Uses LLM (via Ollama)
+3. **Agent Layer (AWS Strands)**
+   - LLM reasoning via Ollama
    - Applies reasoning:
      - Altitude efficiency
      - Wind impact
-     - Safety constraints
+     - Safety constraints(IFR/LIFR)
 
 4. **MCP Tool Layer**
-   - Weather MCP → fetch METAR/TAF  
+   - Weather MCP → fetch METAR/TAF data
    - Mission Control MCP → publish recommendations  
 
 5. **Output Layer**
-   - JSON output + CLI report  
+   - Structured JSON output
+   - CLI summary table (via Rich)
+   - Optional Streamlit UI  
 
 ---
 
 ## Tech Stack
 
-- Python 3.11+
-- AWS Strands
-- MCP Protocol
-- Ollama (LLM runtime)
-- Rich (CLI UI)
-- METAR Weather API
+- Language: Python 3.11+
+- Agent Framework: AWS Strands
+- Protocol: MCP (Model Context Protocol)
+- LLM Runtime: Ollama
+- Weather API: AviationWeather (METAR/TAF)
+- UI: Streamlit (optional)
+- CLI: Rich
+- Containerization: Docker
 
 ---
 
 ## Project Structure
 
 ```
-airline-fuel-optimization-agent/
+Airline-Project/
 │
-├── main.py                     
+├── main.py                  # Entry point (pipeline execution)
+├── app.py                   # Streamlit UI (optional)
+├── optimization.py          # Fuel optimization logic
 │
-├── agent/                      
-│   └── agent.py
+├── agent/
+│   └── agent.py             # Strands agent setup
 │
-├── optimization.py             
+├── mcp_servers/
+│   ├── weather_server.py    # Weather MCP server
+│   └── mission_control.py   # Mission dispatch MCP server
 │
-├── data/                       
-│   └── flights.csv
+├── data/
+│   └── flights.csv          # Sample flight data
 │
-├── mcp_servers/                
-│   ├── weather_server.py       
-│   └── mission_control.py      
+├── images/
+│   └── architecture.png
 │
-├── Dockerfile                  
-├── requirements.txt           
-├── README.md                  
-│
+├── Dockerfile
+├── requirements.txt
+└── README.md
 
 
 ```
@@ -74,7 +90,7 @@ airline-fuel-optimization-agent/
 
 ### 1. Clone the Repository
 ```bash
-git clone 
+git clone https://github.com/ya-sonia/Airline-fuel-optimization-agent.git
 cd Airline-fuel-optimization-agent
 ```
 
@@ -160,8 +176,20 @@ python main.py
 ```bash
 python main.py --flight AI101
 ```
+---
+### 6. Run UI (Optional)
+```bash
+streamlit run app.py
+```
 
+---
+## Docker
 
+Build
+
+```bash
+docker build --network=host -t airline-fuel-optimization-agent .
+```
 
 
 ---
@@ -169,10 +197,10 @@ python main.py --flight AI101
 ##  Example Input
 
 ```csv
-flight_id,origin,destination,aircraft_type,planned_altitude_ft,planned_route,passengers,cargo_kg
-AI101,DEL,BOM,A320,35000,DEL-NAG-BOM,180,2000
-AI202,BLR,DEL,B737,36000,BLR-HYD-DEL,160,1500
-AI303,MUM,DXB,A320,37000,MUM-KAR-DXB,170,1800
+flight_id,origin,destination,aircraft,route,altitude,passengers,cargo_kg
+AI101,DEL,BOM,A320,DEL-NAG-BOM,35000,180,2000
+AI202,BLR,DEL,B737,BLR-HYD-DEL,36000,160,1500
+AI303,MUM,DXB,A320,MUM-KAR-DXB,37000,170,2200
 ```
 
 ---
@@ -201,19 +229,22 @@ AI303,MUM,DXB,A320,37000,MUM-KAR-DXB,170,1800
 1. Load flight data from CSV  
 2. Run local fuel optimization  
 3. Agent fetches weather via MCP  
-4. LLM refines recommendation  
-5. Publish to mission control  
-6. Output final report  
+4. Apply LLM reasoning using Strands
+5. Generate recommendations  
+5. Publish to mission control MCP
+6. Display results  
 
 ---
 
 ##  Features
 
-- Fuel optimization logic  
-- Weather-aware decision making  
-- MCP-based tool integration  
-- Agentic workflow using Strands  
-- CLI reporting  
+- Fuel optimization based on aircraft + route
+- Weather-aware decision making
+- Agent-based reasoning (LLM + rules)
+- MCP tool integration
+- Modular architecture
+- CLI + UI support
+- Dockerized deployment
 
 ---
 
