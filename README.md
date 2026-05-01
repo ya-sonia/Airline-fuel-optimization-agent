@@ -10,7 +10,7 @@ This project builds an intelligent fuel optimization agent that combines traditi
 
 ##  Architecture
 
-<p align="center">
+<p >
   <img src="images/architecture.png" width="500"/>
 </p>
 
