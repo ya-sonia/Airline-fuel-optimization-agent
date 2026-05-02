@@ -19,6 +19,29 @@ def classify(obs):
 
 @mcp.tool()
 def get_weather_bundle(icao: str) -> str:
+    """
+    Fetch weather data for a given airport ICAO code.
+
+    Use this tool when you need current or forecasted weather conditions
+    for a flight's origin or destination.
+
+    Provides:
+    - METAR (current weather observation)
+    - TAF (weather forecast)
+    - Wind speed (in knots)
+    - Temperature (in Celsius)
+    - Flight category (VFR, MVFR, IFR, LIFR)
+
+    Important:
+    - Call this tool ONLY ONCE per airport
+    - Typically used for origin and destination airports
+
+    Args:
+        icao (str): Airport ICAO code (e.g., "DEL", "KJFK")
+
+    Returns:
+        JSON string containing weather details
+    """
     metar_raw = requests.get(METAR_URL.format(icao)).text.strip()
     taf_raw = requests.get(TAF_URL.format(icao)).text.strip()
 
